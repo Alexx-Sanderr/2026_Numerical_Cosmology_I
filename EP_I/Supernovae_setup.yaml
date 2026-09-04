@@ -1,0 +1,43 @@
+#___ Initial Setup for Supernovae Data Constraints ___#
+
+#____________________ Cosmology ____________________#
+
+cosmology:
+  h: 0.6737
+  c: 299792.458
+  Omega_r: 0.0
+  w0_fld: -1.0
+  wa_fld:  0.0 
+    
+#____________ Experiment Data Likelihood ____________#
+
+experiment_config:
+  data_supernovae: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/data/SCPUnion2.1_mu_vs_z.txt"
+  data_cov: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/data/SCPUnion2.1_covmat_sys.txt"
+  seed: 5485
+  nalive: 1000
+  max_steps: 50000
+  ratio_conv: 0.0001
+  acceptance: 0.3
+  outfile_flag: true
+  resume_flag: true
+
+
+#___________ Parameter Estimation Priors ___________#
+
+parameters:
+  cosmology.Omega_m:
+    prior: {min: 0.0, max: 2.0}
+  cosmology.Omega_lambda:
+    prior: {min: -1.0, max: 3.0}
+  cosmology.M_abs:
+    prior: {min: -1.0, max: 1.0}
+
+ 
+#_________________ Output Settings _________________#
+
+output:
+  root: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/output"
+  base_name: "Union2.1_test_"
+  write_output: true
+  headers: true

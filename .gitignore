@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Ambientes Virtuais
+.venv/
+venv/
+env/
+cosmology_env/
+
+# Dados pesados e saídas do Nested Sampling
+#output/
+#*.chain
+#*.dat
+
+# Configurações de editores/IDEs
+.vscode/
+.idea/
+.DS_Store

@@ -1,7 +1,11 @@
-# Python
+# Python & Caches
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
 
 # Ambientes Virtuais
 .venv/
@@ -9,12 +13,19 @@ venv/
 env/
 cosmology_env/
 
-# Dados pesados e saídas do Nested Sampling
-#output/
-#*.chain
-#*.dat
+# Checkpoints do Sampler & Cache de Estado
+*.resume
+*.pkl
 
-# Configurações de editores/IDEs
+# Dados pesados e saídas numéricas do Nested Sampling
+EP_I/old/
+output/
+data/*.txt
+*.npz
+*.chain
+*.dat
+
+# Configurações de editores e OS
 .vscode/
 .idea/
 .DS_Store

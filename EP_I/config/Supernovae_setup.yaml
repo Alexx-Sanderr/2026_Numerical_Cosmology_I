@@ -4,8 +4,9 @@
 
 cosmology:
   h: 0.6737
-  c: 299792.458
   Omega_r: 0.0
+  Omega_m: 0.315
+  Omega_lambda: 0.685 
   w0_fld: -1.0
   wa_fld:  0.0 
     

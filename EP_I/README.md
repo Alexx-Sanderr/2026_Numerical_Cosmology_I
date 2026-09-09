@@ -18,7 +18,7 @@ A Python framework for cosmological parameter inference and MCMC/Nested Sampling
 ---
 
 ## Repository Structure
-
+```text
 EP_I/
 ├── config/
 │   ├── executable.py              # Generic example exec (python3 executable.py -y file.yaml)
@@ -51,7 +51,7 @@ EP_I/
 ├── README.md
 │
 └── requirements.txt               # Required packages 
-
+``
 
 ---
 

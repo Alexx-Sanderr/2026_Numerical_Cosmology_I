@@ -9,7 +9,9 @@ description = "Bayesian analysis for numerical cosmology - 2026"
 dependencies = [
     "numpy",
     "scipy",
-    "pyyaml"
+    "matplotlib",
+    "pyyaml",
+    "corner"
 ]
 
 [project.optional-dependencies]

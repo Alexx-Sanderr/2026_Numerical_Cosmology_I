@@ -20,8 +20,11 @@ experiment_config:
   max_steps: 50000
   ratio_conv: 0.0001
   acceptance: 0.3
+  n_itx: 20
+  dump_lenght: 100
   outfile_flag: true
   resume_flag: true
+  burn_in_fraction: 0.40
 
 
 #___________ Parameter Estimation Priors ___________#
@@ -38,7 +41,7 @@ parameters:
 #_________________ Output Settings _________________#
 
 output:
-  root: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/output"
-  base_name: "Union2.1_test_"
+  root: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/examples_and_analysis/output"
+  base_name: "Union2.1"
   write_output: true
   headers: true

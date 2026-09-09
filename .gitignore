@@ -19,11 +19,8 @@ cosmology_env/
 
 # Dados pesados e saídas numéricas do Nested Sampling
 EP_I/old/
-output/
-data/*.txt
 *.npz
 *.chain
-*.dat
 
 # Configurações de editores e OS
 .vscode/

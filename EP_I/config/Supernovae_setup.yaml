@@ -13,8 +13,8 @@ cosmology:
 #____________ Experiment Data Likelihood ____________#
 
 experiment_config:
-  data_supernovae: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/data/SCPUnion2.1_mu_vs_z.txt"
-  data_cov: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/data/SCPUnion2.1_covmat_sys.txt"
+  data_supernovae: "data/SCPUnion2.1_mu_vs_z.txt"
+  data_cov: "data/SCPUnion2.1_covmat_sys.txt"
   seed: 5485
   nalive: 1000
   max_steps: 50000
@@ -41,7 +41,7 @@ parameters:
 #_________________ Output Settings _________________#
 
 output:
-  root: "/home/alex/Área\ de\ trabalho/Pós-Graduação/Disciplinas/Numerical_Cosmology_1/EP_I/examples_and_analysis/output"
+  root: "examples_and_analysis/output"
   base_name: "Union2.1"
   write_output: true
   headers: true

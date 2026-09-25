@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Bayesian analysis for numerical cosmology - 2026"
 dependencies = [
     "numpy",
+    "jupyter",
     "scipy",
     "matplotlib",
     "pyyaml",

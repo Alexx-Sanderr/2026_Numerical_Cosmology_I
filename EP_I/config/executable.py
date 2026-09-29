@@ -32,10 +32,15 @@ def get_latex_labels(param_names):
      return [ LATEX_LABELS.get( p, p.replace( "_", r"\_" ) ) for p in param_names ]
 
 
-def extraction(config_dict):
+def extraction(config_dict, base_path = None):
+
+    if base_path is None:
+        base_path = Path.cwd()
+    else:
+        base_path = Path( base_path )
     
-    sne_path = config_dict[ "data_supernovae" ]
-    cov_path = config_dict[ "data_cov" ]
+    sne_path = base_path / config_dict[ "data_supernovae" ]
+    cov_path = base_path / config_dict[ "data_cov" ]
     
     print( f"Loading data from: {sne_path}" )
     print( f"Loading covariance from: {cov_path}" )
@@ -58,8 +63,16 @@ def main(args):
     
     initial_time = time.perf_counter()
 
+    yaml_path    = Path(args.yaml).resolve() 
+    project_root = (
+        yaml_path.parent.parent
+        if yaml_path.parent.name == "config"
+        else Path.cwd()
+    )
+    
     print( 100 * "=" )
     print( "Loading Initial Setup" )
+    print( f"Project root set as: {project_root}" )
     print( 100 * "=" + "\n" )
 
     with open( args.yaml, "r", encoding = "utf-8" ) as config_file:
@@ -72,11 +85,13 @@ def main(args):
     config_param = config[ "parameters" ]
     config_out   = config[ "output" ]
 
-    os.makedirs( config_out[ "root" ], exist_ok = True )
+    output_dir   = project_root / config_out["root"]
+
+    os.makedirs( output_dir, exist_ok = True )
     
-    timestamp = datetime.now().strftime( "%Y%m%d_%H%M%S" )
+    timestamp     = datetime.now().strftime( "%Y%m%d_%H%M%S" )
     base_filename = f"{config_out[ 'base_name' ]}_{timestamp}"
-    output_base = os.path.join( config_out[ "root" ], base_filename)
+    output_base   = os.path.join( output_dir, base_filename)
     
     
     print( 100 * "=" )
@@ -86,7 +101,7 @@ def main(args):
     print( "Starting data Extraction" )
     
     
-    z, mu_obs, mu_err, covariance_data = extraction( config_exp )
+    z, mu_obs, mu_err, covariance_data = extraction( config_exp , project_root )
 
     print( 100 * "=" )
     print("Extraction ran Successfully")

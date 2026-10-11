@@ -1,0 +1,50 @@
+# ==========================================
+# Initial example setup for perturbation 
+# ==========================================
+
+#____________________ Cosmology ____________________#
+
+cosmology:
+  h: 0.6737
+  Omega_r: 0.0
+  Omega_m: 0.315
+  Omega_lambda: 0.685 
+  w0_fld: -1.0
+  wa_fld:  0.0 
+
+#____________________ Linear Growth ____________________#
+
+growth:
+  a_i: 1.0e-4
+  a_f: 1.0
+  num_points: 400
+  solver:
+    rtol: 1.0e-8
+    atol: 1.0e-10
+
+#____________________ SPT ____________________#
+
+spt:
+  box_size_L: 500.0       
+  grid_Ng: 64             
+  scale_factor_aref: 1.0  
+  
+  pk_num_bins: 20
+  bispectrum_num_bins: 15
+
+  skewness:
+    R_min: 2.0
+    R_max: 30.0
+    num_radii: 15
+
+#_________________ SPT Multiple Realizations _________________#
+
+ensemble:
+  num_realizations: 25
+  seed_start: 12345
+
+#_________________ Output Settings _________________#
+
+output:
+  root: "analysis/output"
+  base_name: "Test"

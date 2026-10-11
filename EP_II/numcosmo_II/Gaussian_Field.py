@@ -30,7 +30,7 @@ class GaussianField:
         kx, ky, kz = np.meshgrid(k_id, k_id, k_id, indexing="ij")
         k = np.sqrt(kx**2 + ky**2 + kz**2)
 
-        return k
+        return kx, ky, kz, k
 
 
     def Gaussian_field(self):
@@ -40,10 +40,8 @@ class GaussianField:
         V = self.V
         aref = self.aref
 
-        P = self.P_linear(
-            self.normal_modes(L, V, Ng),
-            aref
-        )
+        kx, ky, kz, k = self.normal_modes(L, V, Ng)
+        P = self.P_linear(k, aref)
 
         # Create Fourier-space Gaussian field
         delta_k = np.zeros(

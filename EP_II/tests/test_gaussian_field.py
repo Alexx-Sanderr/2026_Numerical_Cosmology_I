@@ -1,5 +1,5 @@
 import numpy as np
-from Gaussian_Field import GaussianField
+from numcosmo_II.gaussian_field import GaussianField
 
 def test_initialization():
 

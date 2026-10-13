@@ -1,6 +1,7 @@
 import numpy as np
-import cosmology
-import Gaussian_Field
+
+from numcosmo_II import cosmology
+from numcosmo_II import gaussian_field
 
 class LPT:
 
@@ -22,7 +23,7 @@ class LPT:
         self.Ng = Ng
         self.aref = aref
 
-        self.GF = Gaussian_Field.GaussianField(
+        self.GF = gaussian_field.GaussianField(
             L=L,
             Ng=Ng,
             aref=aref

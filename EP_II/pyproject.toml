@@ -7,8 +7,13 @@ name = "numcosmo_II"
 version = "0.1.0"
 description = "Linear perturbations for numerical cosmology 2026"
 dependencies = [
+    "camb",
+    "classy",
+    "jupyter",
+    "matplotlib",
     "numpy",
-    "scipy",
+    "pyyaml",
+    "scipy"   
 ]
 
 [project.optional-dependencies]

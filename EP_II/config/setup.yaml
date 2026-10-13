@@ -1,16 +1,25 @@
 # ==========================================
-# Initial example setup for perturbation 
+# Configuration Setup - Numerical Cosmology EP_II
 # ==========================================
 
 #____________________ Cosmology ____________________#
 
 cosmology:
   h: 0.6737
+  Omega_b: 0.0493           # 0.02237 / h^2
+  Omega_cdm: 0.2657         # 0.1200 / h^2
+  Omega_m: 0.315            # Omega_b + Omega_cdm
   Omega_r: 0.0
-  Omega_m: 0.315
   Omega_lambda: 0.685 
   w0_fld: -1.0
-  wa_fld:  0.0 
+  wa_fld: 0.0 
+
+#____________________ Primordial Spectrum ____________________#
+
+primordial:
+  A_s: 2.1e-9               # Amplitude das perturbações escalares
+  n_s: 0.9649               # Índice espectral escalar
+  k_pivot: 0.05             # Escala de pivô [1/Mpc]
 
 #____________________ Linear Growth ____________________#
 
@@ -26,22 +35,49 @@ growth:
 
 spt:
   box_size_L: 500.0       
-  grid_Ng: 64             
+  grid_Ng: 128             
   scale_factor_aref: 1.0  
   
   pk_num_bins: 20
-  bispectrum_num_bins: 15
+  bispectrum_num_bins: 12
 
   skewness:
-    R_min: 2.0
-    R_max: 30.0
-    num_radii: 15
+    R_min: 4.0
+    R_max: 12.0
+    num_radii: 9
 
 #_________________ SPT Multiple Realizations _________________#
 
 ensemble:
   num_realizations: 25
   seed_start: 12345
+
+#_________________ Boltzmann Solvers _________________#
+
+boltzmann:
+  default_solver: "class"   # 'class' ou 'camb'
+  z_output: 0.0
+  non_linear: "none"
+  gauge: "newtonian"      # 'synchronous' ou 'newtonian'
+  
+  k_sampling:
+    k_min: 1.0e-4           # [h/Mpc]
+    k_max: 10.0             # [h/Mpc]
+    num_points: 200
+
+  precision_test:
+    rtol: 1.0e-8
+    atol: 1.0e-10
+    k_per_decade_for_pk: 100
+
+#_________________ Superhorizon Potential (Ex 5 Supp. B) _________________#
+
+superhorizon_potential:
+  y_i: 1.0e-4               # y = a / a_eq
+  y_f: 1.0e3
+  solver:
+    rtol: 1.0e-10
+    atol: 1.0e-12
 
 #_________________ Output Settings _________________#
 

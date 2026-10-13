@@ -1,5 +1,7 @@
 import numpy as np
-import cosmology
+
+
+from numcosmo_II import cosmology
 from scipy.integrate import solve_ivp
 from scipy.optimize import brentq
 

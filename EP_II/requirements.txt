@@ -1,0 +1,7 @@
+camb>=2.0.4
+classy>=3.4.1.0
+jupyter=1.0.0
+matplotlib>=3.5.0
+numpy>=1.22.0
+pyyaml>=6.0
+scipy>=1.8.0

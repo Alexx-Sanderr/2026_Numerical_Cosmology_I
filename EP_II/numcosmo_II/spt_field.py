@@ -89,7 +89,7 @@ class SPTStatistics:
         return k_centers[ valid ], p_binned[ valid ], n_modes[ valid ]
         
 
-    def spt_equilateral_bispectrum(self, delta_k, num_bins = 12):
+    def spt_equilateral_bispectrum(self, delta_k, num_bins = 15):
         """
             Measures equilateral bispectrum B(k, k, k) using shell-filtered real-space fields
         """
@@ -101,25 +101,27 @@ class SPTStatistics:
         b_tree     = []
         valid_k    = []
 
-        for k_val, p_val in zip( k_centers, pk_linear ):
+        for k_val in k_centers:
             mask = ( self.k_mag >= k_val - dk / 2.0 ) & ( self.k_mag < k_val + dk / 2.0 )
             
-            if np.sum( mask ) < 8:
+            if np.sum( mask ) < 12:
                 continue
 
             delta_shell_k = np.where( mask, delta_k, 0.0 )
             delta_shell_x = np.fft.ifftn( ( self.Ng ** 3 / self.V ) * delta_shell_k ).real 
 
             I_shell_k = np.where( mask, 1.0, 0.0 )
-            I_shell_x = np.fft.ifftn( I_shell_k )
+            I_shell_x = np.fft.ifftn( I_shell_k ).real
 
             N_tri = np.sum( I_shell_x ** 3 ).real * ( self.Ng ** 6 )
 
             if N_tri > 0:
                 b_val = ( self.V ** 2 / ( self.Ng ** 3 * N_tri ) ) * np.sum( delta_shell_x ** 3 )
+
+                p_lin_val = float( np.atleast_1d( self.gf.P_linear( k_val ) )[ 0 ]  )
                 
                 b_measured.append( b_val )
-                b_tree.append( ( 12.0 / 7.0 ) * ( p_val ** 2 ) )
+                b_tree.append( ( 12.0 / 7.0 ) * ( p_lin_val ** 2 ) )
                 valid_k.append( k_val)
             
         return np.array( valid_k ), np.array( b_measured ), np.array( b_tree )
@@ -151,7 +153,7 @@ class SPTStatistics:
         return np.array( R_array ), np.array( S3_list )
 
 
-    def run_ensemble_analysis(self, num_realizations = 10, num_bins = 10, R_array = None):
+    def run_ensemble_analysis(self, num_realizations = 10, num_bins = 10, R_array = None, seed_start = 12345):
         """
             Auxiliary function to obtain N realizations of a Gaussian field, the mean and uncertainty of the bispectrum, and S3(R)
         """
@@ -163,11 +165,9 @@ class SPTStatistics:
         s3_list     = []
 
         for seed in range( num_realizations ):
-            
-            rng = np.random.default_rng( seed = 1000 + seed )
-           
-            self.gf.rng          = rng
-            delta_1_x, delta_1_k = self.gf.Gaussian_field()
+
+            current_seed         = seed_start + seed 
+            delta_1_x, delta_1_k = self.gf.Gaussian_field( seed = current_seed )
 
             delta_2_x, delta_2_k = self.compute_delta_2( delta_1_k )
             delta_tot_k          = delta_1_k + delta_2_k

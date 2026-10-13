@@ -19,9 +19,7 @@ class GaussianField:
         P = P0 * (k / k0) * np.exp(-(k / 0.8)**2)
 
         # P(k=0) is not used because delta_k=0 there
-        P[k == 0] = 0.0
-
-        return P
+        return np.where(k == 0, 0.0, P)
 
 
     def normal_modes(self, L, V, Ng):
@@ -33,7 +31,7 @@ class GaussianField:
         return kx, ky, kz, k
 
 
-    def Gaussian_field(self):
+    def Gaussian_field(self, seed = None):
 
         L = self.L
         Ng = self.Ng
@@ -49,7 +47,7 @@ class GaussianField:
             dtype=np.complex128
         )
 
-        rng = np.random.default_rng(seed=12345)
+        rng = np.random.default_rng(seed=seed)
         
         for i in range(Ng):
             for j in range(Ng):

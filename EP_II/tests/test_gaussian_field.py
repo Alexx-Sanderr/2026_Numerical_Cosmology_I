@@ -25,9 +25,12 @@ def test_P_linear():
 def test_normal_modes():
 
     field = GaussianField(L=100,Ng=8,aref=1.0)
-    k = field.normal_modes(field.L,field.V,field.Ng)
+    kx, ky, kz, k = field.normal_modes(field.L,field.V,field.Ng)
 
     assert k.shape == (8, 8, 8)
+    assert kx.shape == (8, 8, 8)
+    assert ky.shape == (8, 8, 8)
+    assert kz.shape == (8, 8, 8)
     assert k[0, 0, 0] == 0.0
     assert np.all(k >= 0.0)
 

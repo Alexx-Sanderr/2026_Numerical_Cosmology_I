@@ -52,6 +52,34 @@ ensemble:
   num_realizations: 25
   seed_start: 12345
 
+#_________________ LPT / Zel'dovich _________________#
+
+lpt:
+  box_size_L: 200.0          # Tamanho da caixa de simulação [Mpc/h]
+  grid_Ng: 128               # Resolução da grade por dimensão (N^3 partículas)
+  scale_factor_aref: 1.0     # Fator de escala de referência
+  a_ini: 0.01                # Fator de escala inicial
+  a_target: 1.0              # Fator de escala final para avaliação
+  seed: 42                   # Semente aleatória para o campo gaussiano
+  assignment_scheme: "ngp"   # Esquema de atribuição de massa em grade ('ngp' ou 'cic')
+  pk_num_bins: 25            # Número de bins para o espectro 1D
+
+#_________________ Spherical Collapse _________________#
+
+spherical_collapse:
+  ai: 1.0e-4                 # Fator de escala inicial
+  z_c: 0.0                   # Redshift alvo de colapso
+  delta_i: 1e-4
+  delta_stop: 1.0e4          # Critério de parada / singularidade
+  default_model: "C"         # Formulação padrão ('A', 'B' ou 'C')
+  f_i: 1.0                   # Taxa de crescimento inicial
+  n_points: 1000             # Número de pontos na malha de integração
+  shooting:
+    delta_i_min: 1.0e-8      # Limite inferior de busca por bisseção
+    delta_i_max: 1.0e-1      # Limite superior de busca por bisseção
+    tol: 1.0e-10             # Tolerância para convergência do delta_i
+    max_iter: 100            # Número máximo de iterações do shooting
+
 #_________________ Boltzmann Solvers _________________#
 
 boltzmann:
@@ -70,7 +98,7 @@ boltzmann:
     atol: 1.0e-10
     k_per_decade_for_pk: 100
 
-#_________________ Superhorizon Potential (Ex 5 Supp. B) _________________#
+#_________________ Superhorizon Potential _________________#
 
 superhorizon_potential:
   y_i: 1.0e-4               # y = a / a_eq

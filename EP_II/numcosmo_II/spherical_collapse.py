@@ -1,5 +1,5 @@
 import numpy as np
-import cosmology
+from .cosmology import FLRW
 from scipy.integrate import solve_ivp
 from scipy.optimize import brentq
 

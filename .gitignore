@@ -22,6 +22,7 @@ EP_I/old/
 *.npz
 *.chain
 EP_II/Analysis/output/
+output/
 
 # Configurações de editores e OS
 .vscode/

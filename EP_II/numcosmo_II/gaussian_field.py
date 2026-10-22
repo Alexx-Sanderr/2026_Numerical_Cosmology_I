@@ -1,4 +1,5 @@
 import numpy as np
+import camb
 
 class GaussianField:
 
@@ -12,14 +13,76 @@ class GaussianField:
 
     def P_linear(self, k, a=1.0):
 
-        # Example spectrum only
-        P0 = 1000.0
-        k0 = 0.1
+    # Parametros cosmologicos
+      H0 = 67.0
+      h = H0 / 100.0
 
-        P = P0 * (k / k0) * np.exp(-(k / 0.8)**2)
+      Omega_m = 0.315
+      Omega_b = 0.049
 
-        # P(k=0) is not used because delta_k=0 there
-        return np.where(k == 0, 0.0, P)
+
+      a_ref = 1.0
+      z_ref = 1.0 / a_ref - 1.0
+
+      pars = camb.CAMBparams()
+
+      pars.set_cosmology(
+        H0=H0,
+        ombh2=Omega_b * h**2,
+        omch2=(Omega_m - Omega_b) * h**2,
+        omk=0.0)
+
+      pars.InitPower.set_params(
+        As=2.1e-9,
+        ns=0.965)
+
+      pars.set_matter_power(
+        redshifts=[z_ref],
+        kmax=10.0,
+        nonlinear=False)
+
+      pars.NonLinear = camb.model.NonLinear_none
+
+      results = camb.get_results(pars)
+
+      PK = results.get_matter_power_interpolator(
+        nonlinear=False,
+        hubble_units=True,
+        k_hunit=True)
+
+      k_array = np.asarray(k, dtype=float)
+      P_ref = np.zeros_like(k_array)
+
+      mask = k_array > 0.0
+      P_ref[mask] = PK.P(z_ref, k_array[mask])
+
+      if not np.isclose(a, a_ref):
+        z = 1.0 / a - 1.0
+
+        pars.set_matter_power(
+            redshifts=[z, z_ref],
+            kmax=10.0,
+            nonlinear=False)
+        results_a = camb.get_results(pars)
+
+        PK_a = results_a.get_matter_power_interpolator(
+            nonlinear=False,
+            hubble_units=True,
+            k_hunit=True)
+
+        P_a = np.zeros_like(k_array)
+        P_a[mask] = PK_a.P(z, k_array[mask])
+
+        P_ref_a = np.zeros_like(k_array)
+        P_ref_a[mask] = PK_a.P(z_ref, k_array[mask])
+
+        ratio = np.ones_like(k_array)
+        valid = mask & (P_ref_a > 0.0)
+        ratio[valid] = P_a[valid] / P_ref_a[valid]
+
+        P_ref = P_ref * ratio
+
+      return P_ref.item() if P_ref.ndim == 0 else P_ref
 
 
     def normal_modes(self, L, V, Ng):
@@ -31,7 +94,7 @@ class GaussianField:
         return kx, ky, kz, k
 
 
-    def Gaussian_field(self, seed = None):
+    def Gaussian_field(self, seed=42):
 
         L = self.L
         Ng = self.Ng

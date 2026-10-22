@@ -21,6 +21,7 @@ cosmology_env/
 EP_I/old/
 *.npz
 *.chain
+EP_II/Analysis/output/
 
 # Configurações de editores e OS
 .vscode/

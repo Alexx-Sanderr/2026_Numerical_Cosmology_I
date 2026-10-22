@@ -14,7 +14,7 @@ A Python framework for linear and non-linear cosmological structure formation, S
   * Generates 3D Gaussian random density fields and computes Standard Perturbation Theory (SPT) higher-order corrections.
   * Calculates 1D power spectra $P(k)$, bispectrum $B(k_1, k_2, k_3)$, and smoothed skewness $S_3(R)$ over multiple realizations.
 
-- **Lagrangian Perturbation Theory (`numcosmo_II.lpt1`)**:
+- **Lagrangian Perturbation Theory (`numcosmo_II.lpt1`, `numcosmo_II.lpt2`)**:
   * Computes 1LPT / Zel'dovich displacement fields on 3D grids using Gaussian random field realizations.
   * Particle-Mesh grid assignment algorithms (Nearest Grid Point - NGP / Cloud-In-Cell - CIC) for cosmic web density field reconstruction.
   * Calculates matter power spectra $P(k)$ with shot-noise subtraction.
@@ -38,7 +38,6 @@ A Python framework for linear and non-linear cosmological structure formation, S
 ```text
 EP_II/
 ├── analysis/
-│   ├── output/                            # Generated figure outputs and session diagnostics
 │   ├── analysis.ipynb                     # Main notebook executing Ex 1, Ex 2, Ex 3, and Ex 5
 │   ├── analysis_spherical_collapse.ipynb  # Dedicated analysis notebook for Ex 4 (Spherical Collapse)
 │   └── analysis.pdf                       # PDF compiling the complete analysis of results
@@ -52,6 +51,7 @@ EP_II/
 │   ├── cosmology.py                       # FLRW background & linear growth ODE solvers
 │   ├── gaussian_field.py                  # Gaussian random field generator
 │   ├── lpt1.py                            # 1LPT / Zel'dovich approximation & grid mass assignment
+│   ├── lpt2.py                            # 2LPT Implementation for supplementary check
 │   ├── spherical_collapse.py              # Non-linear collapse models (A, B, C) & shooting threshold
 │   └── spt_field.py                       # Standard Perturbation Theory (SPT) & statistics
 │

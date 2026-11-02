@@ -99,33 +99,37 @@ pytest -v tests/
 import numpy as np
 import numcosmo_II as nc
 
-# 1. Initialize Cosmology & Linear Growth
+# 1. Initialize Cosmology & Linear Growth (com todos os argumentos requeridos)
 cosmo = nc.FLRW(
-    h=0.6737,
-    Omega_m=0.315,
-    Omega_lambda=0.685
+    h            = 0.6737,
+    Omega_m      = 0.315,
+    Omega_lambda = 0.685,
+    Omega_r      = 0.0,
+    w0_fld       = -1.0,
+    wa_fld       = 0.0,
+    aref         = 1.0
 )
 
-a_grid = np.linspace(1e-4, 1.0, 1000)
-growth_sol = cosmo.solve_growth(a=a_grid, y0=[1e-4, 1.0])
-D_a, f_a = cosmo.get_growth_observables(growth_sol, a_eval=np.array([1.0]))
+a_grid     = np.linspace( 1e-4, 1.0, 1000 )
+growth_sol = cosmo.solve_growth( a = a_grid, y0 = [ 1e-4, 1.0 ] )
+D_a, f_a   = cosmo.get_growth_observables( growth_sol, a_eval = np.array( [ 1.0 ] ) )
 
-print(f"Growth Rate f(a=1.0): {f_a[0]:.4f}")
+print( f"Growth Rate f(a=1.0): {f_a[0]:.4f}" )
 
 # 2. Spherical Collapse Threshold via Shooting Method
-sc_model = nc.SphericalCollapse(cosmo)
+sc_model         = nc.SphericalCollapse( cosmo )
 threshold_finder = nc.spherical_collapse.CollapseThreshold(
     sc_model,
-    model="C",
-    ai=1e-4,
-    delta_stop=1e4,
-    f_i=f_a[0],
-    n_points=1000
+    model      = "C",
+    ai         = 1e-4,
+    delta_stop = 1e4,
+    f_i        = f_a[ 0 ],
+    n_points   = 1000
 )
 
-delta_i, delta_c = threshold_finder.find(z_c=0.0)
-print(f"Initial Overdensity delta_i: {delta_i:.6e}")
-print(f"Linear Collapse Threshold delta_c(z=0): {delta_c:.4f}")
+delta_i, delta_c = threshold_finder.find( z_c = 0.0 )
+print( f"Initial Overdensity delta_i: {delta_i:.6e}" )
+print( f"Linear Collapse Threshold delta_c(z=0): {delta_c:.4f}" )
 ```
 
 * Complete analysis found at

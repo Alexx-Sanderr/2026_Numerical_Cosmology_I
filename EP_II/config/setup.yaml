@@ -36,7 +36,8 @@ growth:
 spt:
   box_size_L: 500.0       
   grid_Ng: 128             
-  scale_factor_aref: 1.0  
+  scale_factor_aref: 1.0
+  dealias: True
   
   pk_num_bins: 20
   bispectrum_num_bins: 12
@@ -49,7 +50,7 @@ spt:
 #_________________ SPT Multiple Realizations _________________#
 
 ensemble:
-  num_realizations: 25
+  num_realizations: 15
   seed_start: 12345
 
 #_________________ LPT / Zel'dovich _________________#
@@ -94,8 +95,8 @@ boltzmann:
     num_points: 200
 
   precision_test:
-    rtol: 1.0e-8
-    atol: 1.0e-10
+    rtol: 1.0e-10
+    atol: 1.0e-12
     k_per_decade_for_pk: 100
 
 #_________________ Superhorizon Potential _________________#

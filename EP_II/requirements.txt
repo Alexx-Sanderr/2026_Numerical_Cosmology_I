@@ -1,6 +1,6 @@
 camb>=2.0.4
 classy>=3.4.1.0
-jupyter=1.0.0
+jupyter>=1.0.0
 matplotlib>=3.5.0
 numpy>=1.22.0
 pandas>=3.0.6

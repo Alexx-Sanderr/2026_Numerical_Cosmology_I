@@ -9,7 +9,7 @@ class LPT:
         L=100,
         Ng=128,
         aref=1.0,
-        h=0.67,
+        h=0.6737,
         Omega_m=0.315,
         Omega_lambda=0.685,
         Omega_r=0.0,
@@ -38,6 +38,7 @@ class LPT:
 
         self.a_ini = a_ini
         self.ai = ai
+        self.h  = h
 
 
     def create_gaussian_field(self, seed=42):
@@ -57,17 +58,20 @@ class LPT:
 
         return self.phi_k
         
-    def growth(self, n_points=1000, rtol=1e-8, atol=1e-10):
-      a_grid = np.linspace(self.a_ini, self.ai, n_points)
-      sol = self.cosmo.solve_growth(a=a_grid, y0=[self.a_ini, 1.0], rtol=rtol, atol=atol)
+    def growth( self, n_points = 1000, rtol = 1e-8, atol = 1e-10 ):
 
-      D_at_ai, f_at_ai = self.cosmo.get_growth_observables(sol, a_eval=np.array([self.ai]))
-      D_at_ref, _      = self.cosmo.get_growth_observables(sol, a_eval=np.array([self.aref]))
-
-      self.D1_ai = D_at_ai[0] / D_at_ref[0]
-      self.f1_i  = f_at_ai[0]
-
-      return self.D1_ai, self.f1_i
+        a_max  = max( float( self.ai ), float( self.aref ) )
+        a_grid = np.linspace( self.a_ini, a_max, n_points )
+        
+        sol = self.cosmo.solve_growth( a = a_grid, y0 = [ self.a_ini, 1.0 ], rtol = rtol, atol = atol )
+    
+        D_at_ai, f_at_ai = self.cosmo.get_growth_observables( sol, a_eval = np.array( [ self.ai ] ) )
+        D_at_ref, _      = self.cosmo.get_growth_observables( sol, a_eval = np.array( [ self.aref ] ) )
+    
+        self.D1_ai = D_at_ai[ 0 ] / D_at_ref[ 0 ]
+        self.f1_i  = f_at_ai[ 0 ]
+    
+        return self.D1_ai, self.f1_i
 
 
     def displacement_fourier(self):
@@ -98,6 +102,11 @@ class LPT:
             * self.delta_ref_k[mask]
         )
 
+        nyq                       = self.Ng // 2
+        self.Psi_x_k[ nyq, :, : ] = 0.0
+        self.Psi_y_k[ :, nyq, : ] = 0.0
+        self.Psi_z_k[ :, :, nyq ] = 0.0
+        
         return self.Psi_x_k, self.Psi_y_k, self.Psi_z_k
 
 
@@ -155,7 +164,7 @@ class LPT:
     def particle_velocities(self):
 
         H_i = self.cosmo.Ha(a=self.ai)
-        self.v_p = self.ai * H_i * self.f1_i * self.Psi_q
+        self.v_p = self.ai * H_i * self.f1_i * self.Psi_q / self.h
 
         return self.v_p
 

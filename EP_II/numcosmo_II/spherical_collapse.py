@@ -199,6 +199,7 @@ class SphericalCollapse:
         "Model_C": solutions["C"],
     }
 
+
 class CollapseThreshold:
     """Find the initial overdensity, collapse threshold, and virial overdensity."""
 
@@ -213,9 +214,9 @@ class CollapseThreshold:
         delta_i_min=1e-8,
         delta_i_max=1e-2,
         tol=1e-10,
-        max_iter=100,
         rtol=1e-8,
         atol=1e-10,
+        max_iter=100,
     ):
         self.collapse = collapse
         self.model = model.upper()
@@ -226,23 +227,15 @@ class CollapseThreshold:
         self.delta_i_min = delta_i_min
         self.delta_i_max = delta_i_max
         self.tol = tol
-        self.max_iter = max_iter
         self.rtol = rtol
         self.atol = atol
-
-        if self.model not in ("A", "B", "C"):
-            raise ValueError("model must be 'A', 'B', or 'C'.")
-
-        if ai <= 0 or delta_stop <= 0 or n_points <= 0:
-            raise ValueError("ai, delta_stop, and n_points must be positive.")
-
-        if not (0 < delta_i_min < delta_i_max):
-            raise ValueError("Require 0 < delta_i_min < delta_i_max.")
+        self.max_iter = max_iter
 
         self.rhs = getattr(collapse, f"Model_{self.model}")
 
     def initial_conditions(self, delta_i):
         """Return initial conditions for the selected nonlinear model."""
+
         theta_i = -self.f_i * delta_i / (1.0 + delta_i)
 
         if self.model == "A":
@@ -254,120 +247,145 @@ class CollapseThreshold:
 
     def linear_growth_equation(self, N, y):
         """Linear growth equation in N = ln(a)."""
+
         delta_L, delta_L_N = y
         _, Omega_m, A_H = self.collapse.background_terms(N)
 
-        delta_L_NN = (-A_H * delta_L_N + 1.5 * Omega_m * delta_L)
+        delta_L_NN = -A_H * delta_L_N + 1.5 * Omega_m * delta_L
 
         return [delta_L_N, delta_L_NN]
 
     def collapses_by_target(self, delta_i, N_ini, N_target):
-        """Check whether the nonlinear collapse threshold is reached."""
+        """Integrate until the collapse threshold is reached or N_target."""
 
         if self.model in ("A", "B"):
-
+    
             def event(N, y):
                 return y[0] - self.delta_stop
-
             event.direction = 1
-
+    
         else:
-
             def event(N, y):
                 return y[0] - 1.0 / self.delta_stop
-
+    
             event.direction = -1
-
+    
         event.terminal = True
-
+    
         sol = solve_ivp(
             self.rhs,
             (N_ini, N_target),
             self.initial_conditions(delta_i),
             events=event,
-            rtol=1e-8,
-            atol=1e-10,
-            max_step=(N_target - N_ini) / self.n_points,
-        )
-
-        if not sol.success and len(sol.t_events[0]) == 0:
+            rtol=self.rtol,
+            atol=self.atol,
+            max_step=(N_target - N_ini) / self.n_points,)
+    
+        if not sol.success:
             raise RuntimeError(sol.message)
+    
+        collapsed = len(sol.t_events[0]) > 0
+    
+        if collapsed:
+            N_event = sol.t_events[0][0]
+            y_event = sol.y_events[0][0]
+            event_residual = event(N_event, y_event)
+        else:
+            N_event = np.nan
+            y_event = None
+            event_residual = np.nan
+    
+        return {
+            "collapsed": collapsed,
+            "N_event": N_event,
+            "y_event": y_event,
+            "event_residual": event_residual,
+            "solution": sol,}
 
-        return len(sol.t_events[0]) > 0
-
+ 
     def find(self, z_c):
         """
         Find the tuned initial amplitude delta_i and the linear
         collapse threshold delta_c at the target redshift.
         """
+    
         a_c = 1.0 / (1.0 + z_c)
-
+    
         if a_c <= self.ai:
             raise ValueError("The target scale factor must exceed ai.")
-
+    
         N_ini = np.log(self.ai)
         N_target = np.log(a_c)
-
+    
         lo = self.delta_i_min
         hi = self.delta_i_max
-
+    
         # Find a lower bound that does not collapse by the target.
         for _ in range(60):
-            if not self.collapses_by_target(lo, N_ini, N_target):
+            result = self.collapses_by_target(lo, N_ini, N_target)
+    
+            if not result["collapsed"]:
                 break
+    
             lo *= 0.5
         else:
-            raise RuntimeError(
-                "Could not find a lower non-collapsing bound."
-            )
-
+            raise RuntimeError("Could not find a lower non-collapsing bound.")
+    
         # Find an upper bound that collapses by the target.
         for _ in range(60):
-            if self.collapses_by_target(hi, N_ini, N_target):
+            result = self.collapses_by_target(hi, N_ini, N_target)
+    
+            if result["collapsed"]:
                 break
+    
             hi *= 2.0
         else:
-            raise RuntimeError(
-                "Could not find an upper collapsing bound."
-            )
-
+            raise RuntimeError("Could not find an upper collapsing bound.")
+    
         # Bisection.
+        converged = False
+    
         for _ in range(self.max_iter):
             mid = 0.5 * (lo + hi)
-
-            if self.collapses_by_target(mid, N_ini, N_target):
+    
+            result = self.collapses_by_target(mid, N_ini, N_target)
+    
+            if result["collapsed"]:
                 hi = mid
             else:
                 lo = mid
-
+    
             if hi - lo <= self.tol * max(abs(mid), 1e-15):
+                converged = True
                 break
-        else:
+    
+        if not converged:
             raise RuntimeError("Bisection did not converge.")
-
+    
         delta_i = 0.5 * (lo + hi)
-
+    
         # Linear evolution to the formal-collapse epoch.
         linear = solve_ivp(
             self.linear_growth_equation,
             (N_ini, N_target),
             [delta_i, self.f_i * delta_i],
             t_eval=[N_target],
-            rtol=1e-10,
-            atol=1e-12,
+            rtol=self.rtol,
+            atol=self.atol,
         )
-
+    
         if not linear.success:
             raise RuntimeError(linear.message)
-
+    
         delta_c = linear.y[0, -1]
-
+    
         return delta_i, delta_c
 
     def turnaround_event(self):
         """Return the event function for theta = -3."""
 
         def event(N, y):
+
             if self.model == "A":
                 delta, delta_N = y
                 theta = -delta_N / (1.0 + delta)
@@ -386,6 +404,7 @@ class CollapseThreshold:
         Locate turnaround and return its scale factor, redshift,
         density contrast, zeta_ta, and event residual.
         """
+
         N_ini = np.log(self.ai)
         N_target = -np.log1p(z_c)
 
@@ -397,8 +416,8 @@ class CollapseThreshold:
             (N_ini, N_target),
             self.initial_conditions(delta_i),
             events=self.turnaround_event(),
-            rtol=1e-10,
-            atol=1e-12,
+            rtol=self.rtol,
+            atol=self.atol,
             max_step=(N_target - N_ini) / self.n_points,
         )
 
@@ -417,8 +436,10 @@ class CollapseThreshold:
         if self.model == "A":
             delta_ta, delta_N_ta = y_ta
             theta_ta = -delta_N_ta / (1.0 + delta_ta)
+
         elif self.model == "B":
             delta_ta, theta_ta = y_ta
+
         else:
             g_ta, theta_ta = y_ta
             delta_ta = 1.0 / g_ta
@@ -442,6 +463,7 @@ class CollapseThreshold:
 
         Assumes flat LCDM or EdS, with negligible radiation.
         """
+
         ta = self.find_turnaround(delta_i, z_c)
 
         a_ta = ta["a_ta"]
@@ -453,10 +475,11 @@ class CollapseThreshold:
 
         # lambda_ta = rho_Lambda / rho_sph,ta.
         # Valid for flat LCDM with negligible radiation.
-        lambda_ta = ((1.0 - Omega_m_ta) / (zeta_ta * Omega_m_ta))
+        lambda_ta = (1.0 - Omega_m_ta) / (zeta_ta * Omega_m_ta)
 
         if abs(lambda_ta) < 1e-12:
             y_vir = 0.5
+
         else:
 
             def virial_equation(y):
@@ -493,6 +516,7 @@ class CollapseThreshold:
             "Delta_vir_m": Delta_vir_m,
             "Delta_vir_c": Delta_vir_c,
         }
+
 
     def lambda_ta_background(self, Omega_m0, a_ta, zeta_ta):
         """lambda_ta = rho_Lambda/rho_sph,ta, with rho_sph,ta=zeta_ta*rho_m(a_ta)."""

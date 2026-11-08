@@ -1,0 +1,80 @@
+\subsection{Lagrangian Perturbation Theory (LPT)}
+\label{subsec:lpt_methodology}
+
+Using the Gaussian field defined in the last section, we can construct the elements for the description of the first order of the Lagrangian perturbation, using the Zel'dovich approximation
+
+\subsubsection{Zel'dovich approximation}
+
+The Zel'dovich approximation extrapolates the first-order growing displacement, and the density is considered infinitesimal (\cite{white2014zeldovich,Tiago_Batalha_Lecture_7}). This approximation is possible to describe from the displacement and the Lagrangian coordinate:
+    \begin{equation}
+        \mathbf{x}_{ZA}(\mathbf{q},a)
+        = \mathbf{q} - D_1(a)\nabla_{\mathbf{q}}\phi^{(1)}(\mathbf{q})
+    \end{equation}
+and the velocity can be described in the same way
+    \begin{equation}
+        \mathbf{v}_{ZA}
+        = -\mathcal{H}f_1D_1\nabla_{\mathbf{q}}\phi^{(1)}
+    \end{equation}
+consequently, describing the equations using the displacement, defined as
+    \begin{equation}
+        \mathbf{\Psi}^{(1)}_{\mathbf{k}}(a_i)
+        = iD_1(a_i)\frac{\mathbf{k}}{k^2}\delta_{\mathrm{ref},\mathbf{k}}
+    \end{equation}
+with the following terms:
+    \begin{itemize}
+        \item $\mathbf{\Psi}^{(1)}_{\mathbf{k}}(a_i)$: First-order displacement field in Fourier space, evaluated at the initial scale factor $a_i$.
+    
+        \item $D_1(a_i)$: Linear growth factor evaluated at the initial scale factor
+    
+        \item $\mathbf{k}$: Wavevector specifying the direction aofFourier mode.
+    
+        \item $k=|\mathbf{k}|$: Magnitude of the wavevector.
+    
+        \item $\delta_{\mathrm{ref},\mathbf{k}}$: Fourier-space density contrast at the reference epoch.
+    \end{itemize}
+    
+The following expressions for the velocity and position of the particles are defined with the displacement:
+    \begin{equation}
+        \mathbf{x}_p = \mathbf{q}_p + \mathbf{\Psi}^{(1)}_p,
+        \qquad
+        \mathbf{v}_p = \mathcal{H}_i f_{1,i}\mathbf{\Psi}^{(1)}_p
+    \end{equation}
+
+From this definition, we assign particles to a mesh and compute the power spectrum:
+    \begin{equation}
+        P_b(k)=\frac{1}{N_k V}\sum_{\mathbf{k}_a\in S_k}
+        \left|\delta_{\mathbf{k}_a}\right|^2
+         \label{eq:binned_power_spectrum}
+    \end{equation}
+    
+\subsubsection{Second order of LPT}
+
+In the second-order LPT, the displacement is expanded to englobe nonlinear effects that arise as cosmic structures evolve. So, the comoving position of the particle is, in this case
+    \begin{equation}
+        \mathbf{x}(\mathbf{q},a)
+        =\mathbf{q}+\mathbf{\Psi}^{(1)}(\mathbf{q},a)
+        +\mathbf{\Psi}^{(2)}(\mathbf{q},a)
+    \end{equation}
+    
+and in the same way for the first order, the displacement field can be expressed as
+    \begin{equation}
+        \mathbf{\Psi}^{(2)}=-D_2(a)\nabla_{\mathbf q}\phi^{(2)}
+    \end{equation}
+    
+The second-order potential is determined by the first-order potential through the Poisson equation
+    \begin{equation}
+        \nabla_{\mathbf q}^{2}\phi^{(2)}
+        =\frac12[
+        (\nabla_{\mathbf q}^{2}\phi^{(1)})^2
+        -\phi^{(1)}_{,ij}\phi^{(1)}_{,ij}]
+    \end{equation}
+with $\phi^{(1)}_{,ij}\phi^{(1)}_{,ij}$ summing the squares of the elements of the Hessian matrix, which describes how the first-order displacement varies in different directions.
+
+The second-order growth equation is described by the following equation
+    \begin{equation}
+        D_2''+\mathcal H D_2'
+        -\frac32\mathcal H^2\Omega_m D_2
+        =-\frac32\mathcal H^2\Omega_m D_1^2,
+    \end{equation}
+where primes denote derivatives with respect to the conformal time $\tau$. 
+This equation shows the source of the second-order perturbation on the right-hand side, and the left side describes the operator governing the growth of a perturbation.

@@ -1,0 +1,102 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage{Source}
+
+% --- Configurações de Bibliografia ---
+\usepackage[
+    backend=biber,
+    style=authoryear-comp, 
+    sorting=nyt,          
+    maxcitenames=2,
+    mincitenames=1,
+    uniquelist=false,     
+    dashed=false          ]{biblatex}
+
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\addbibresource{References.bib} 
+
+% --- Dados do Projeto e Autores ---
+\newcommand{\tituloProjeto}{}
+
+\newcommand{\orientadorNome}{Thiago Batalha de Castro}
+
+\newcommand{\autorA}{Alex Sander do C. Souza}
+\newcommand{\nuspA}{12558940}
+\newcommand{\emailA}{alexsander5996@usp.br}
+
+\newcommand{\autorB}{Alison Vitor S. R. de Sousa}
+\newcommand{\nuspB}{13728913}
+\newcommand{\emailB}{alisonvitor@usp.br}
+
+\graphicspath{{Figuras/}}
+
+\begin{document}
+
+% ---------------- CAPA ----------------
+\begin{titlepage}
+
+\begin{center}
+    \includegraphics[width=4cm]{Figures/Logo Instituto de Física.png} 
+    \vspace{10pt}
+    
+    \textsc{\large Universidade de São Paulo}\\
+    \textsc{\large Instituto de Física}\\
+    \textsc{\large Pós-Graduação em Física}
+    
+    \vspace{2.5cm}
+
+    \textbf{\Large PGF5434 - Numerical Cosmology I}
+    
+    \vspace{1.2cm}
+    
+    \textbf{\large \tituloProjeto}
+
+    \vspace{3cm}
+\end{center}
+
+\begin{flushleft}
+    \small
+    \textbf{Professor:} \orientadorNome \\[0.6em]
+    \textbf{Students:}
+    \vspace{0.2em}
+    \begin{small}
+    \begin{tabular}{lll}
+        \autorA & Nº USP: \nuspA & Email: \texttt{\emailA} \\
+        \autorB & Nº USP: \nuspB & Email: \texttt{\emailB} \\
+    \end{tabular}
+    \end{small}
+\end{flushleft}
+
+\vfill
+\begin{center}
+    \textbf{São Paulo}\\
+    \textbf{2026}
+\end{center}
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\pagenumbering{arabic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ---------------- CONTEÚDO ----------------
+
+\input{EP2/Introduction}
+
+\newpage
+
+\input{EP2/Methodology}
+
+\newpage
+
+\input{EP2/Numerical_Checks}
+
+% --- BIBLIOGRAFIA ---
+\newpage
+\addcontentsline{toc}{section}{References}
+\printbibliography[title={References}]
+
+\end{document}

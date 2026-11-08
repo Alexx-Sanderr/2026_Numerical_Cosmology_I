@@ -1,0 +1,21 @@
+\subsection{Gaussian Random Field Generation}
+\label{subsec:gaussian_fields}
+
+Cosmological perturbation theory and particle simulations rely on Gaussian Random Fields (GRFs) to specify initial density perturbations $\delta_1(\mathbf{x})$. 
+Given a baseline 3D linear power spectrum $P_L(k, a_{\mathrm{ref}})$, a discrete field is generated on a periodic $N_g^3$ spatial grid of physical box length $L$ and volume $V = L^3$.
+
+In Fourier space, discrete wavevectors are specified as $\mathbf{k} = (2\pi/L)(n_x, n_y, n_z)$ with $n_i \in [-N_g/2, N_g/2 - 1]$. 
+The Fourier modes $\delta_1(\mathbf{k})$ are sampled independently from a Gaussian distribution with variance proportional to $V P_L(k)$
+    \begin{equation}
+        \delta_1(\mathbf{k}) = \sqrt{\frac{V P_L(k)}{2}} \left( g_1 + i g_2 \right),
+        \label{eq:grf_fourier_mode}
+    \end{equation}
+where $g_1, g_2 \sim \mathcal{N}(0, 1)$ are independent standard normal variables. 
+To guarantee a real-valued density contrast $\delta_1(\mathbf{x})$ in real space via Inverse Fast Fourier Transform (IFFT), Hermitian symmetry is strictly enforced across the grid
+    \begin{equation}
+        \delta_1(-\mathbf{k}) = \delta_1^*(\mathbf{k}),
+        \label{eq:hermitian_symmetry}
+    \end{equation}
+with the zero mode set to $\delta_1(\mathbf{k}=0) = 0$ to conserve total cosmic mass. 
+
+This Gaussian random field generator provides the primary linear density realization $\delta_1(\mathbf{k})$ required for both Eulerian SPT (Section~\ref{subsec:spt_methodology}) and Lagrangian 1LPT (Section~\ref{subsec:lpt_methodology}) implementations.

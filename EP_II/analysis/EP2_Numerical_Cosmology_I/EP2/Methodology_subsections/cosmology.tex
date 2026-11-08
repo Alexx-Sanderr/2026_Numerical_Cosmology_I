@@ -1,0 +1,76 @@
+\subsection{Cosmology and Linear Growth Dynamics}
+\label{subsec:cosmology_linear_growth}
+
+The background expansion dynamics of a general isotropic and homogeneous FLRW universe are described by the physical Hubble parameter $H(a) = H_0 E(a)$, where $H_0 \equiv 100\,h\,\mathrm{km\,s^{-1}\, Mpc^{-1}}$ is the Hubble constant and $E(a)$ is the dimensionless Hubble function. 
+Adopting the Chevallier--Polarski--Linder (CPL) parameterization for the dark energy equation of state $w(a) = w_0 + w_a(1-a)$, $E^2(a)$ is given by
+    \begin{equation}
+        E^2(a) 
+        = \Omega_k(0)a^{-2} 
+        + \Omega_m(0)a^{-3} 
+        + \Omega_r(0)a^{-4} 
+        + \Omega_\Lambda(0)a^{-3(1+w_0+w_a)} \exp\left[-3w_a(1-a)\right],
+        \label{eq:dimensionless_hubble}
+    \end{equation}
+where $\Omega_k(0)$, $\Omega_m(0)$, $\Omega_r(0)$, and $\Omega_\Lambda(0)$ denote the current fractional energy density parameters for spatial curvature, matter, radiation, and dark energy, respectively, satisfying $\sum \Omega_i(0) = 1$.
+
+The scale-factor-dependent matter density parameter $\Omega_m(a) \equiv \rho_m(a)/\rho_c(a)$ is defined as
+    \begin{equation}
+        \Omega_m(a) 
+        = \frac{\Omega_m(0)}{E^2(a)}\, a^{-3}.
+        \label{eq:omega_m_a}
+    \end{equation}
+    
+In the late-time matter-dominated era, pressureless linear perturbations evolve under the competition between gravitational instability and Hubble friction. 
+Defining the logarithmic scale factor $N \equiv \ln a$ as the independent variable, the linear growth function $G(N)$ obeys the second-order ordinary differential equation (ODE)
+    \begin{equation}
+        G_{NN} + A_H(N)\, G_N - \frac{3}{2}\Omega_m(N)\, G 
+        = 0,
+        \label{eq:linear_growth_N}
+    \end{equation}
+where $G_N \equiv \mathrm{d}G/\mathrm{d}N$, $G_{NN} \equiv \mathrm{d}^2G/\mathrm{d}N^2$, and $A_H(N)$ represents the Hubble drag parameter
+    \begin{equation}
+        A_H(N) 
+        \equiv 2 + \frac{\mathrm{d}\ln H}{\mathrm{d}N} 
+        = 2 + \frac{a}{2 E^2(a)} \frac{\mathrm{d}E^2}{\mathrm{d}a}.
+        \label{eq:expansion_decay}
+    \end{equation}
+
+Alternatively, Eq.~\eqref{eq:linear_growth_N} can be cast directly in terms of the scale factor $a$
+    \begin{equation}
+        D_{aa} + \left( \frac{3}{a} + \frac{\mathrm{d}\ln H}{\mathrm{d}a} \right) D_a - \frac{3}{2}\frac{\Omega_m(a)}{a^2}\, D = 0,
+        \label{eq:linear_growth_a}
+    \end{equation}
+where $D_a \equiv \mathrm{d}D/\mathrm{d}a$ and $D_{aa} \equiv \mathrm{d}^2D/\mathrm{d}a^2$.
+
+\subsubsection{Initial Conditions and Growth Observables}
+
+Integration starts at an early epoch deep in the matter-dominated regime, where curvature and dark energy are negligible ($\Omega_m(a_i) \approx 1$). Under pure matter domination, the growing-mode solution behaves as $G(a) \propto a$, yielding exact growing-mode initial conditions
+    \begin{equation}
+        G(a_i) = a_i, \qquad G_N(a_i) = a_i.
+        \label{eq:growth_ic}
+    \end{equation}
+    
+From the numerical solution $G(N)$, two scale-independent primary observables are extracted
+    \begin{enumerate}
+    
+        \item \textbf{Normalized Linear Growth Factor $D(a)$}: Normalized to unity at the present epoch ($a = 1$)
+            \begin{equation}
+                D(a) = \frac{G(a)}{G(a=1)}.
+                \label{eq:growth_factor_norm}
+            \end{equation}
+            
+        \item \textbf{Logarithmic Growth Rate $f(a)$}: Defined as $f(a) \equiv \mathrm{d}\ln D/\mathrm{d}\ln a$, computed directly from the state variables without numerical differentiation of $D(a)$
+            \begin{equation}
+                f(a) = \frac{G_N(a)}{G(a)}.
+                \label{eq:growth_rate_f}
+            \end{equation}
+    \end{enumerate}
+
+\subsubsection{Quadrature Validation Benchmark}
+
+To independently validate the adaptive ODE solver (\texttt{solve\_ivp}), $G(a)$ is also evaluated via quadrature integration:
+    \begin{equation}
+        G_{\mathrm{quad}}(a) = \frac{5}{2}\Omega_m(0)\, E(a) \int_{0}^{a} \frac{\mathrm{d}\tilde{a}}{\tilde{a}^3 E^3(\tilde{a})}.
+        \label{eq:growth_quadrature}
+    \end{equation}
+Comparing the ODE integration against the quadrature evaluation of Eq.~\eqref{eq:growth_quadrature} serves as a high-precision benchmark, establishing the baseline linear growth $D(a)$ and growth rate $f(a_i)$ required for setting up 1LPT initial conditions and spherical collapse shooting routines.

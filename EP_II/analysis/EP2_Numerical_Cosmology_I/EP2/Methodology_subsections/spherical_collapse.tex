@@ -1,0 +1,71 @@
+\subsection{Spherical Collapse}
+
+The spherical collapse describes the evolution of an initial overdense region in the expanding background (\cite{pace2017spherical,Tiago_Batalha_Lecture_9}). We then follow the nonlinear evolution by solving the equations implemented in the spherical-collapse solver. We denote the initial density contrast by ($\delta_i$) and the initial scale factor by ($a_i$).
+
+In this exercise, we are using three different collapse prescriptions, as follows:
+    \begin{align}
+            \text{A:} & 
+            \quad
+        \delta_{NN} + A_H \delta_N
+        - \frac{4}{3}\frac{\delta_N^2}{1+\delta}
+        - \frac{3}{2}\Omega_m\delta(1+\delta) 
+        = 0\\
+        \text{B:} & 
+        \quad
+        \delta_N 
+        = -(1+\delta)\vartheta,
+        \qquad
+        \vartheta_N 
+        = -A_H\vartheta
+        - \frac{\vartheta^2}{3}
+        - \frac{3}{2}\Omega_m\delta\\
+        \text{C:}& \quad
+        g_N 
+        = g(1+g)\vartheta,
+        \qquad
+        \vartheta_N 
+        = -A_H\vartheta
+        - \frac{\vartheta^2}{3}
+        - \frac{3\Omega_m}{2g},
+    \end{align}
+with
+    \begin{equation}
+        A_H(N) = 2 + \frac{d\ln H}{dN},
+        \qquad
+        \vartheta = \frac{\nabla_x \cdot \mathbf{v}}{aH},
+        \qquad
+        g = \frac{1}{\delta}.
+    \end{equation}
+    
+\subsubsection{Initial conditions, turnaround and virialization}
+
+First, we describe the initial conditions at an early scale factor $a_i$, where the perturbation is assumed sufficiently small for linear theory to reliably describe its initial evolution. With the early factor, we compute the growth rate and the initial overdensity, determined numerically so that the nonlinear evolution reaches the prescribed collapse redshift ($z_c$).
+
+An important variable is the critical linear overdensity, defined as the density contrast extrapolated to the collapse redshift. In the numerical implementation, the initial overdensity is adjusted iteratively until the nonlinear evolution satisfies the adopted collapse criterion at the target redshift. For each collapse prescription, the initial overdensity is adjusted iteratively within a prescribed search interval until the target collapse condition is satisfied.
+
+For flat $\Lambda$CDM cosmologies, the virial radius is obtained from the energy-based virialization condition. The dimensionless virial radius is defined as $y_{\mathrm{vir}}=R_{\mathrm{vir}}/R_{\mathrm{ta}}$, where $R_{\mathrm{ta}}$ and $R_{\mathrm{vir}}$ denote the physical radii at turnaround and virialization, respectively. The implementation solves the cubic equation
+
+\begin{equation}
+    4\lambda_{\mathrm{ta}}y_{\mathrm{vir}}^3
+    -2(1+\lambda_{\mathrm{ta}})y_{\mathrm{vir}}
+    +1=0,
+    \label{eq:virial_radius}
+\end{equation}
+
+where $\lambda_{ta}$ is the ratio of the cosmological constant energy density to the mean density of the overdense region at turnaround. The virial overdensity is calculated using the turnaround overdensity, the ratio between the turnaround and collapse scale factors, and the dimensionless virial radius. With $a_c=(1+z_c)^{-1}$, the overdensity relative to the background matter density at collapse is
+
+\begin{equation}
+    \Delta_{\mathrm{vir,m}}(a_c)
+    = \zeta_{\mathrm{ta}}
+    \left(\frac{a_c}{a_{\mathrm{ta}}}\right)^3
+    y_{\mathrm{vir}}^{-3},
+    \label{eq:virial_overdensity_matter}
+\end{equation}
+
+\begin{equation}
+    \Delta_{\mathrm{vir,c}}(a_c)
+    = \Omega_m(a_c)\,
+    \Delta_{\mathrm{vir,m}}(a_c).
+    \label{eq:virial_overdensity_critical}
+\end{equation}
+

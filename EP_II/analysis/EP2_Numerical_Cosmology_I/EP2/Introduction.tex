@@ -1,0 +1,21 @@
+\section{Introduction}
+
+Cosmological structure formation describes how primordial quantum fluctuations generated during inflation evolve under gravitational instability into the complex cosmic web observed today.
+While linear perturbation theory provides an accurate description of density perturbations at early epochs and large spatial scales, late-time evolution on intermediate and non-linear scales requires specialized analytical approximations and numerical frameworks.
+
+This report documents the methodology and numerical validation for the Numerical Cosmology II (EP2) project. The developed \texttt{Python} framework integrates six core cosmological pipelines:
+    \begin{enumerate}
+        \item \textbf{Background FLRW Dynamics \& Linear Growth}: High-precision numerical ODE integration of the growth factor $D(a)$ and logarithmic growth rate $f(a)$ across flat $\Lambda$CDM, Einstein--de Sitter (EdS), and open CDM cosmologies.
+        
+        \item \textbf{Gaussian Random Fields (GRF)}: Fourier-space generation of 3D linear density realizations enforcing Hermitian symmetry and exact mass conservation.
+        
+        \item \textbf{Standard Perturbation Theory (SPT)}: Real-space FFT evaluation of second-order density fields $\delta_2(\mathbf{x})$, equilateral bispectrum $B(k,k,k)$, and Top-Hat smoothed reduced skewness $S_3(R)$.
+        
+        \item \textbf{Lagrangian Perturbation Theory (1LPT)}: Particle displacement fields under the Zel'dovich approximation, Nearest Grid Point (NGP) mass assignment, and shot-noise-subtracted 1D power spectrum measurement.
+        
+        \item \textbf{Spherical Collapse Solver}: Non-linear integration across three algebraically equivalent formulations (Models A, B, and C) and bisection shooting determination of the linear collapse threshold $\delta_c(z)$.
+        
+        \item \textbf{Boltzmann Map Integration}: Transfer function reconstruction and cross-code precision benchmarking between CLASS and CAMB linear matter power spectra $P_m(k)$.
+    \end{enumerate}
+    
+As the main reference, we follow the lecture notes from the Numerical Cosmology course \parencite{Tiago_Batalha_Lecture_5, Tiago_Batalha_Lecture_6, Tiago_Batalha_Lecture_7, Tiago_Batalha_Lecture_8, Tiago_Batalha_Lecture_9}. 

@@ -1,0 +1,119 @@
+% Meu pacote de estilo pessoal (meupreambulo.sty)
+%--------------------------------------------------
+
+% --- Identificação do Pacote ---
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Source}
+
+% --- Processamento de Opções ---
+% \DeclareOption*{...}
+% \ProcessOptions\relax
+
+% --- Pacotes Requeridos ---
+
+% Codificação e Idioma
+\RequirePackage[english]{babel}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{microtype}
+\RequirePackage{csquotes}
+\RequirePackage{CJKutf8} 
+
+
+% Layout e Geometria da Página
+\RequirePackage[top=3cm, bottom=2cm, left=3cm, right=2cm]{geometry}
+\RequirePackage{indentfirst}
+
+% Matemática
+\RequirePackage{amsmath, amsfonts, amssymb, bbold}
+\RequirePackage{mathtools} % Carrega e estende o amsmath
+\RequirePackage{braket}
+\DeclareMathOperator\arctanh{arctanh}
+
+% Elementos Gráficos, Figuras e Tabelas
+\RequirePackage{graphicx}
+\RequirePackage{subcaption}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage{booktabs} % Adicionado para tabelas profissionais
+\RequirePackage[allowframebreaks]{animate}
+%\RequirePackage{pgfplots}
+
+% Formatação de Texto e Estrutura
+\RequirePackage{multicol}
+\RequirePackage[normalem]{ulem}
+\RequirePackage{float}
+\RequirePackage{verbatim}
+\RequirePackage[shortlabels]{enumitem}
+\RequirePackage{lipsum} % Útil para testes, pode ser comentado depois
+
+% Listagens de Código-Fonte
+\RequirePackage{listings}
+
+% Referências Cruzadas e Links (Carregados por último para evitar conflitos)
+\RequirePackage{hyperref}
+\RequirePackage[brazilian, nameinlink]{cleveref} % Para referências inteligentes
+
+% --- Configurações dos Pacotes ---
+
+% Bibliotecas do TikZ
+\usetikzlibrary{calc}
+\usetikzlibrary{angles, quotes}
+\usetikzlibrary{babel}
+\usetikzlibrary{arrows.meta, positioning, fit, decorations}
+
+% Definições de Cores
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.8,0,0.2}
+\definecolor{backcolour}{rgb}{.95,.95,1}
+
+% Estilo para o Listings
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Configurações do Hyperref (opcional, pode ser feito no .tex principal também)
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+% --- Novos Comandos ---
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle,draw,inner sep=2pt] (char) {#1};
+}}
+
+\newcommand{\EleF}{\vec{E}}
+\newcommand{\MagF}{\vec{B}}
+\newcommand{\Exspace}{\hspace{0.15cm}}
+\newcommand{\chines}[1]{\begin{CJK*}{UTF8}{gbsn}#1\end{CJK*}}
+\newcommand{\boldp}{\mathbf{p}}
+\newcommand{\boldq}{\mathbf{q}}
+
+% --- Hifenização ---
+% Adicione aqui palavras que o LaTeX pode separar de forma errada.
+% Exemplo: \hyphenation{es-pe-ci-fi-ca-men-te pro-gra-ma-ção}
+
+
+% --- Fim do Pacote ---
+% Avisa ao TeX para parar de ler este arquivo.
+\endinput

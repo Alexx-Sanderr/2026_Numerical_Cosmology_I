@@ -1,0 +1,42 @@
+\subsection{Boltzmann Solvers and Primordial Transferring Mapping}
+\label{subsec:boltzmann_methodology}
+
+The primordial scalar perturbation spectrum generated during inflation is parametrized by amplitude $A_s$ and spectrum index $n_s$ at a pivot scale $k_* = 0.05\,\mathrm{Mpc}^{-1}$
+    \begin{align*}
+        P_{\mathcal{R}}(k) = \frac{2\pi^2}{k^3} A_s \left( \frac{k}{k_*} \right)^{n_s - 1}.
+        \label{eq:primordial_power_spectrum}
+    \end{align*}
+
+To map the primordial fluctuations to the late-time matter density perturbation $\delta_m(k,z)$, a linear Boltzmann solver integrates the coupled Einstein--Boltzmann system.
+Given the matter density transfer function $T_m(k,z) \equiv \delta_m(k,z)/ \mathcal{R}(k)$ the linear matter power spectrum is reconstructed as
+    \begin{equation}
+        P_m^{\mathrm{rec}}(k, z) = P_{\mathcal{R}}(k) \, T_m^2(k, z) = \frac{2\pi^2}{k^3} A_s \left( \frac{k}{k_*} \right)^{n_s - 1} T_m^2(k, z).
+        \label{eq:matter_spectrum_reconstruction}
+    \end{equation}
+
+\subsubsection{Supplementary Check A: Collisionless Boltzmann Hierarchy Closure}
+
+For a source-free, massless relativistic fluid, the multipole moments $\Psi_l(k, \tau)$ obey the infinite hierarchy of coupled differential equations
+    \begin{equation}
+        \dot{\Psi}_0 = -k \Psi_1, \qquad \dot{\Psi}_l = \frac{k}{2l+1} \left[ l \Psi_{l-1} - (l+1) \Psi_{l+1} \right] \quad (l \ge 1).
+        \label{eq:boltzmann_hierarchy}
+    \end{equation}
+Truncating the hierarchy at a finite multipole $l_{\mathrm{max}}$ introduces artificial boundary reflection unless an outgoing closure scheme is imposed
+    \begin{equation}
+        \Psi_{l_{\mathrm{max}}+1}^{(\mathrm{outgoing})} = \frac{2 l_{\mathrm{max}} + 1}{k \tau} \Psi_{l_{\mathrm{max}}} - \Psi_{l_{\mathrm{max}}-1}.
+        \label{eq:hierarchy_outgoing_closure}
+    \end{equation}
+
+\subsubsection{Supplementary Check B: Radiation-to-Matter Superhorizon Potential Ratio}
+
+In the superhorizon ($k\mathcal{H} \ll 1$), adiabatic limit with negligible anisotropic stress, the gravitational potential $\Phi(y)$ evolves as a function of $y \equiv a / a_{\mathrm{eq}}$ according to
+    \begin{equation}
+        \frac{\mathrm{d}\Phi}{\mathrm{d}\ln y} + \frac{6 + 5y}{2(1 + y)}\Phi = -\frac{4 + 3y}{2(1 + y)},
+        \label{eq:superhorizon_potential_ode}
+    \end{equation}
+with early radiation-era initial condition $\Phi_i(y_i \ll 1) = -2/3 + y_i/24$. In the late matter era ($y \gg 1$), the analytical asymptotic solution approaches $\Phi_f=  -3/5$, establishing the universal superhorizon potential ratio
+    \begin{equation}
+        \frac{\Phi_m}{\Phi_r} = \frac{-3/5}{-2/3} = \frac{9}{10} = 0.900000.
+        \label{eq:potential_ratio_theoretical}
+    \end{equation}
+
